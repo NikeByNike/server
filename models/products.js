@@ -4,22 +4,29 @@ const productSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   name: { type: String, required: true},
   price: { type: Number, required: true},
+  img: {type: String}
 });
 const Product = mongoose.model("Product", productSchema);
 
 exports.all = () => {
-  return Product.find().select("name price _id").exec();
+  return Product.find()
+    .select("name price _id img")
+    .exec();
 };
 
 exports.findById = (req) => {
-  return Product.findById(req.params.id).select("name price _id").exec();
+  return Product.findById(req.params.id)
+    .select("name price _id img")
+    .exec();
 };
 
 exports.create = (req) => {
+  console.log(req.file);
   const product = new Product({
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
     price: req.body.price,
+    img: req.file.path
   });
   return product.save();
 };

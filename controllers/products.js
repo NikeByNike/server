@@ -39,7 +39,8 @@ exports.create = (req, res) => {
       res.send({
         _id: data._id,
         name: data.name,
-        price: data.price
+        price: data.price,
+        img: data.img
       });
     })
     .catch(err => {

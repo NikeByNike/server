@@ -8,11 +8,17 @@ const orderSchema = mongoose.Schema({
 const Order = mongoose.model("Order", orderSchema);
 
 exports.all = () => {
-  return Order.find().select("product quantity _id").exec();
+  return Order.find()
+    .select("product quantity _id")
+    .populate("product", "name price")
+    .exec();
 };
 
 exports.findById = (req) => {
-  return Order.findById(req.params.id).select("product quantity _id").exec();
+  return Order.findById(req.params.id)
+    .select("product quantity _id")
+    .populate("product", "name price")
+    .exec();
 };
 
 exports.create = (req) => {
