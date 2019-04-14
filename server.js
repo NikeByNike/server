@@ -1,37 +1,18 @@
-const bodyParser = require('body-parser');
-const ObjId = require('mongodb').ObjectID;
-const express = require('express');
-
+const http = require("http");
 const db = require('./db');
-const productsController = require("./controllers/products");
+const app = require("./app");
 
-const app = express();
+const port = process.env.Port || 3000;
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+const server = http.createServer(app);
 
-app.get("/", (req, res) => {
-  res.send("Hello API");
-});
+const url = 'mongodb://localhost:27017/myAPI';
 
-app.get("/products", productsController.all);
-
-app.post("/products", productsController.create);
-
-app.get("/products/:id", productsController.findById);
-
-app.put("/products/:id", productsController.update);
-
-app.delete("/products/:id", productsController.delete);
-
-const url = 'mongodb://localhost:27017';
-const dbName = 'myAPI';
-
-db.connect(url, dbName, (err) => {
+db.connect(url, (err) => {
   if (err) {
     console.log(err);
   }
-  app.listen(3000, function () {
-    console.log('Example app listening on port 3000!');
+  server.listen(port,() => {
+    console.log(`App listening on port ${port}!`);
   });
 });

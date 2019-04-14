@@ -1,14 +1,14 @@
-const Products = require("../models/products");
+const Orders = require("../models/orders");
 
 exports.all = (req, res) => {
-  Products.all()
+  Orders.all()
     .then(data => {
       if (data.length === 0) {
-        return res.status(404).send({message: "No products"});
+        return res.status(404).send({message: "No orders"});
       }
       const response = {
         count: data.length,
-        products: data
+        orders: data
       };
       res.send(response);
     })
@@ -18,13 +18,13 @@ exports.all = (req, res) => {
 };
 
 exports.findById = (req, res) => {
-  Products.findById(req)
+  Orders.findById(req)
     .then(data => {
       if (data) {
         res.send(data);
       } else {
         return res.status(404).send({
-          message: "Product with such id not found",
+          message: "Order with such id not found",
         });
       }
     })
@@ -34,12 +34,12 @@ exports.findById = (req, res) => {
 };
 
 exports.create = (req, res) => {
-  Products.create(req)
+  Orders.create(req)
     .then(data => {
       res.send({
         _id: data._id,
-        name: data.name,
-        price: data.price
+        product: data.product,
+        quantity: data.quantity
       });
     })
     .catch(err => {
@@ -48,7 +48,7 @@ exports.create = (req, res) => {
 };
 
 exports.update = (req, res) => {
-  Products.update(req)
+  Orders.update(req)
     .then(data => res.send(data))
     .catch(err => {
       return res.status(500).send(err);
@@ -56,7 +56,7 @@ exports.update = (req, res) => {
 };
 
 exports.delete = (req, res) => {
-  Products.delete(req)
+  Orders.delete(req)
     .then(data => res.send(data))
     .catch(err => {
       return res.status(500).send(err);

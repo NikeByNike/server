@@ -1,32 +1,35 @@
-const ObjId = require('mongodb').ObjectID;
-const db = require('../db');
+const mongoose = require('mongoose');
 
-exports.all = (callback) => {
-  db.get().collection("products").find().toArray((err, data) => {
-    callback(err, data);
-  })
+const productSchema = mongoose.Schema({
+  _id: mongoose.Schema.Types.ObjectId,
+  name: { type: String, required: true},
+  price: { type: Number, required: true},
+});
+const Product = mongoose.model("Product", productSchema);
+
+exports.all = () => {
+  return Product.find().select("name price _id").exec();
 };
 
-exports.findById = (id, callback) => {
-  db.get().collection("products").findOne({_id: ObjId(id)}, (err, data) => {
-    callback(err, data);
-  })
+exports.findById = (req) => {
+  return Product.findById(req.params.id).select("name price _id").exec();
 };
 
-exports.create = (product, callback) => {
-  db.get().collection("products").insertOne(product, (err, data) => {
-    callback(err, data);
-  })
+exports.create = (req) => {
+  const product = new Product({
+    _id: new mongoose.Types.ObjectId(),
+    name: req.body.name,
+    price: req.body.price,
+  });
+  return product.save();
 };
 
-exports.update = (id, product, callback) => {
-  db.get().collection("products").updateOne({_id: ObjId(id)}, {$set:product}, (err, data) => {
-    callback(err, data);
-  })
+exports.update = (req) => {
+  let updateFields = {};
+  Object.entries(req.body).map(item => updateFields[item[0]] = item[1]);
+  return Product.updateOne({_id: req.params.id}, { $set:updateFields}).exec();
 };
 
-exports.delete = (id, callback) => {
-  db.get().collection("products").deleteOne({_id: ObjId(id)}, (err, data) => {
-    callback(err, data);
-  })
+exports.delete = (req) => {
+  return Product.deleteOne({_id: req.params.id}).exec();
 };
