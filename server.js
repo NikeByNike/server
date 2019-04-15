@@ -10,7 +10,7 @@ const url = 'mongodb://localhost:27017/myAPI';
 
 db.connect(url, (err) => {
   if (err) {
-    console.log(err);
+    return console.log(err);
   }
   server.listen(port,() => {
     console.log(`App listening on port ${port}!`);

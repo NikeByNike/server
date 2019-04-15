@@ -2,5 +2,6 @@ node_modules
 build
 uploads
 npm-debug.log
+mongodb.service
 .env
 .idea
