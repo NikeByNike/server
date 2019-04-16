@@ -1,5 +1,6 @@
 const express = require('express');
 const multer = require("multer");
+const checkAuth = require("../middleware/check-auth");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -18,12 +19,12 @@ const productsController = require("../controllers/products");
 
 router.get("/", productsController.all);
 
-router.post("/", upload.single("img"), productsController.create);
+router.post("/", checkAuth, upload.single("img"), productsController.create);
 
 router.get("/:id", productsController.findById);
 
-router.put("/:id", productsController.update);
+router.put("/:id", checkAuth, productsController.update);
 
-router.delete("/:id", productsController.delete);
+router.delete("/:id", checkAuth, productsController.delete);
 
 module.exports = router;

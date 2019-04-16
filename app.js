@@ -4,6 +4,7 @@ const morgan = require('morgan');
 
 const productsRoutes = require("./routes/products");
 const ordersRoutes = require("./routes/orders");
+const userRoutes = require("./routes/user");
 
 const app = express();
 
@@ -19,5 +20,7 @@ app.get("/", (req, res) => {
 app.use("/products", productsRoutes);
 
 app.use("/orders", ordersRoutes);
+
+app.use("/user", userRoutes);
 
 module.exports = app;
